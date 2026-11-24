@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
-import { isBuiltin, createRequire } from "node:module";
-import { pathToFileURL } from "node:url";
+import { isBuiltin } from "node:module";
+import { pathToFileURL, fileURLToPath } from "node:url";
 import { discoverWorkspacePackages } from "./lib/catalog.mjs";
 
 const SEMVER_RE =
@@ -480,17 +480,23 @@ function parseSkillFrontmatter(content) {
 }
 
 function loadThemeSchema(repoRoot) {
-  const candidates = [
+  const candidates = [];
+
+  // Resolve the schema from this script's own location (the repo's node_modules).
+  // This is the authoritative source and works even when the audited root is an
+  // isolated temp workspace (as in tests), which has no node_modules of its own.
+  try {
+    const resolved = import.meta.resolve("@earendil-works/pi-coding-agent");
+    const pkgRoot = path.dirname(path.dirname(fileURLToPath(resolved)));
+    candidates.push(path.join(pkgRoot, "schemas", "theme.schema.json"));
+  } catch {
+    // Resolution is best-effort; fall back to path candidates below.
+  }
+
+  candidates.push(
     path.join(repoRoot, "node_modules", "@earendil-works", "pi-coding-agent", "schemas", "theme.schema.json"),
     "/usr/local/lib/node_modules/@earendil-works/pi-coding-agent/schemas/theme.schema.json",
-  ];
-  try {
-    const req = createRequire(import.meta.url);
-    const pkgJson = req.resolve("@earendil-works/pi-coding-agent/package.json");
-    candidates.push(path.join(path.dirname(pkgJson), "schemas", "theme.schema.json"));
-  } catch {
-    // Ignore resolution error
-  }
+  );
 
   for (const candidate of candidates) {
     if (fs.existsSync(candidate)) {
