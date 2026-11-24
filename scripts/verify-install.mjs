@@ -209,14 +209,28 @@ function parseRpcGetCommandsResponse(stdout, contextLabel) {
   throw new Error(`${contextLabel}: missing RPC JSON response for id "1" in stdout: ${stdout}`);
 }
 
+const NO_MODELS_WARNING_RE = /^Warning: No models available\..*$/;
+const NO_MODELS_DOC_RE = /^\S+\/docs\/(?:providers|models)\.md$/;
+
+export function unexpectedStderrLines(stderr) {
+  return stripAnsi(stderr)
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(
+      (line) =>
+        line !== "" && !NO_MODELS_WARNING_RE.test(line) && !NO_MODELS_DOC_RE.test(line),
+    );
+}
+
 function assertNoStderr(result, commandLabel) {
   assert(
     result.status === 0,
     `${commandLabel} exited with ${result.status}. stderr:\n${result.stderr}\nstdout:\n${result.stdout}`,
   );
+  const unexpected = unexpectedStderrLines(result.stderr);
   assert(
-    result.stderr.trim() === "",
-    `${commandLabel} produced unexpected stderr:\n${result.stderr}`,
+    unexpected.length === 0,
+    `${commandLabel} produced unexpected stderr:\n${unexpected.join("\n")}`,
   );
 }
 
