@@ -1,0 +1,67 @@
+import { StringEnum } from "@earendil-works/pi-ai";
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+import { Type } from "typebox";
+
+const ParamsSchema = Type.Object({
+  input: Type.String({ description: "Input text to process." }),
+  mode: Type.Optional(
+    StringEnum(["summary", "detailed"] as const, {
+      description: "Output verbosity mode.",
+    }),
+  ),
+});
+
+export default function (pi: ExtensionAPI) {
+  let active = true;
+
+  pi.registerFlag("{{FLAG_NAME}}", {
+    description: "Enable {{SLUG}} starter extension behavior.",
+    type: "boolean",
+    default: false,
+  });
+
+  pi.registerTool({
+    name: "{{TOOL_NAME}}",
+    label: "{{SLUG}}",
+    description: "{{DESCRIPTION}}",
+    promptSnippet: "Run the {{TOOL_NAME}} starter tool",
+    promptGuidelines: [
+      "Use {{TOOL_NAME}} when the user asks to run the {{SLUG}} starter tool.",
+    ],
+    parameters: ParamsSchema,
+    async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
+      const mode = params.mode ?? "summary";
+      const flagEnabled = Boolean(pi.getFlag("{{FLAG_NAME}}"));
+      const text = active
+        ? `[{{SLUG}}:${mode}] ${params.input} (flag=${String(flagEnabled)}, cwd=${ctx.cwd})`
+        : "[{{SLUG}}] extension is shutting down.";
+
+      return {
+        content: [{ type: "text", text }],
+        details: {},
+      };
+    },
+  });
+
+  pi.registerCommand("{{CMD_NAME}}", {
+    description: "Show status for {{PACKAGE_NAME}}.",
+    handler: async (_args, ctx) => {
+      const flagEnabled = Boolean(pi.getFlag("{{FLAG_NAME}}"));
+      const message = `{{PACKAGE_NAME}} ready (--{{FLAG_NAME}}=${String(flagEnabled)})`;
+      if (ctx.hasUI) {
+        ctx.ui.notify(message, "info");
+      }
+    },
+  });
+
+  pi.on("session_start", (_event, _ctx) => {
+    active = true;
+  });
+
+  pi.on("session_shutdown", (_event, ctx) => {
+    active = false;
+    if (ctx.hasUI) {
+      ctx.ui.setStatus("{{SLUG}}", undefined);
+    }
+  });
+}

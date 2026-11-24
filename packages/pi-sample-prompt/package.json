@@ -1,0 +1,21 @@
+{
+  "name": "@local/pi-sample-prompt",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Starter Pi prompt template package providing a focused /sample-review command.",
+  "keywords": [
+    "pi-package"
+  ],
+  "files": [
+    "README.md",
+    "prompts"
+  ],
+  "piCatalog": {
+    "category": "prompt",
+    "status": "starter",
+    "profiles": [
+      "core"
+    ]
+  }
+}

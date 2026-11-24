@@ -1,0 +1,28 @@
+{
+  "name": "@local/pi-sample-extension",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Starter Pi extension package demonstrating custom tool, command, CLI flag, and session lifecycle best practices.",
+  "keywords": [
+    "pi-package"
+  ],
+  "files": [
+    "README.md",
+    "CHANGELOG.md",
+    "extensions",
+    "!extensions/**/*.test.*"
+  ],
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "piCatalog": {
+    "category": "extension",
+    "status": "starter",
+    "profiles": [
+      "core"
+    ]
+  }
+}
