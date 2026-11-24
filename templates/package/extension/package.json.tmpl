@@ -1,0 +1,28 @@
+{
+  "name": "{{PACKAGE_NAME}}",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "{{DESCRIPTION}}",
+  "keywords": [
+    "pi-package"
+  ],
+  "files": [
+    "extensions",
+    "!extensions/**/*.test.*",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "piCatalog": {
+    "category": "extension",
+    "status": "starter",
+    "profiles": [
+      "core"
+    ]
+  }
+}
