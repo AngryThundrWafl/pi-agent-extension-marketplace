@@ -1,0 +1,21 @@
+{
+  "name": "@local/pi-sample-skill",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Starter Pi skill package providing a pre-merge review checklist for Pi packages.",
+  "keywords": [
+    "pi-package"
+  ],
+  "files": [
+    "README.md",
+    "skills"
+  ],
+  "piCatalog": {
+    "category": "skill",
+    "status": "starter",
+    "profiles": [
+      "core"
+    ]
+  }
+}

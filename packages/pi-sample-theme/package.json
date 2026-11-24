@@ -1,0 +1,21 @@
+{
+  "name": "@local/pi-sample-theme",
+  "version": "0.1.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "Starter dark slate theme package for Pi demonstrating conventional themes/ auto-discovery.",
+  "keywords": [
+    "pi-package"
+  ],
+  "files": [
+    "README.md",
+    "themes"
+  ],
+  "piCatalog": {
+    "category": "theme",
+    "status": "starter",
+    "profiles": [
+      "core"
+    ]
+  }
+}

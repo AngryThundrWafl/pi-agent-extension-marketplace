@@ -379,7 +379,13 @@ function verifyTarballHygiene(pkg, rootDir) {
     throw new Error(`Failed to parse npm pack JSON for ${pkg.relDir}: ${err.message}`);
   }
 
-  const entries = Array.isArray(parsed) ? parsed : [parsed];
+  const entries = Array.isArray(parsed)
+    ? parsed
+    : Array.isArray(parsed?.files)
+      ? [parsed]
+      : parsed && typeof parsed === "object"
+        ? Object.values(parsed)
+        : [];
   const files = entries.flatMap((entry) => (Array.isArray(entry?.files) ? entry.files : []));
   assert(files.length > 0, `npm pack --dry-run --json -w ${pkg.relDir} reported 0 files.`);
 
