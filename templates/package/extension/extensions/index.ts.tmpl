@@ -54,6 +54,10 @@ export default function (pi: ExtensionAPI) {
     },
   });
 
+  pi.on("session_start", (_event, _ctx) => {
+    active = true;
+  });
+
   pi.on("session_shutdown", (_event, ctx) => {
     active = false;
     if (ctx.hasUI) {

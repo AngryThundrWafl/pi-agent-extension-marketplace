@@ -90,7 +90,7 @@ Selector rules:
   - `skill`: packages declaring or containing skills
   - `prompt`: packages declaring or containing prompt templates
   - `theme`: packages declaring or containing themes
-  - `core`: packages tagged with `pi.profile === "core"` or keyword `"core"` (or, when none are explicitly tagged, packages providing extensions, skills, or prompts)
+  - `core`: packages tagged with `"core"` in `piCatalog.profiles`, `pi.profile === "core"`, or keyword `"core"` (or, when none are explicitly tagged, packages providing extensions, skills, or prompts)
 - Positional arguments: package directory name (`pi-<name>`), workspace path (`packages/pi-<name>`), or `package.json` `name`.
 
 `scripts/install-packages.mjs` inherits `process.env`, so setting `PI_CODING_AGENT_DIR` / `HOME` runs it cleanly against an isolated sandbox.

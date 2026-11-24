@@ -187,9 +187,11 @@ describe("generate-catalog", () => {
     assert.equal(readmeText1.startsWith(`${readmeBefore}${CATALOG_START_MARKER}\n`), true);
     assert.equal(readmeText1.endsWith(`\n${CATALOG_END_MARKER}${readmeAfter}`), true);
     assert.match(readmeText1, /@local\/pi-demo/);
+    assert.match(readmeText1, /\(\.\/packages\/pi-demo\)/);
     assert.match(readmeText1, /Demo utility package/);
     assert.doesNotMatch(readmeText1, /_Placeholder_/);
     assert.match(catalogText1, /^# Pi Package Catalog/);
+    assert.match(catalogText1, /\(\.\.\/packages\/pi-demo\)/);
     assert.match(catalogText1, /### @local\/pi-demo \(`v0\.3\.1`\)/);
 
     const gen2 = runCatalog({ rootDir: root, mode: "generate" });

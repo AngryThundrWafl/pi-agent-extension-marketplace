@@ -306,11 +306,12 @@ function formatResourcesSummary(resources) {
 }
 
 /**
- * Render the Markdown catalog table for README.md.
+ * Render the Markdown catalog table for README.md or docs/catalog.md.
  * @param {ReturnType<typeof discoverWorkspacePackages>} packages
+ * @param {string} [linkPrefix]
  * @returns {string}
  */
-export function renderReadmeCatalogSection(packages) {
+export function renderReadmeCatalogSection(packages, linkPrefix = ".") {
   if (packages.length === 0) {
     return "_No packages in catalog yet._";
   }
@@ -322,7 +323,7 @@ export function renderReadmeCatalogSection(packages) {
 
   for (const pkg of packages) {
     const name = `\`${escapeMarkdownCell(pkg.manifest.name ?? pkg.dirName)}\``;
-    const dir = `[\`${pkg.relDir}\`](./${pkg.relDir})`;
+    const dir = `[\`${pkg.relDir}\`](${linkPrefix}/${pkg.relDir})`;
     const version = escapeMarkdownCell(pkg.manifest.version ?? "0.0.0");
     const resources = escapeMarkdownCell(formatResourcesSummary(pkg.resources));
     const description = escapeMarkdownCell(pkg.manifest.description ?? "");
@@ -351,7 +352,7 @@ export function renderCatalogDoc(packages) {
     return lines.join("\n");
   }
 
-  lines.push(renderReadmeCatalogSection(packages), "", "## Package Details", "");
+  lines.push(renderReadmeCatalogSection(packages, ".."), "", "## Package Details", "");
 
   for (const pkg of packages) {
     const pkgName = String(pkg.manifest.name ?? pkg.dirName);
