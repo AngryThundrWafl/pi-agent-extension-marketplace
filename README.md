@@ -30,6 +30,25 @@ npm run new-package -- --name <slug> --type <extension|skill|prompt|theme>
 npm run check
 ```
 
+## Local Development with Docker
+
+The repo ships a `Dockerfile` for an offline-safe dev container (Node 22.19.0, dev dependencies pre-installed):
+
+```bash
+docker build -t pi-catalog-dev .
+docker run --rm -it pi-catalog-dev bash
+```
+
+Inside the container the repo is at `/app`; run `npm run check`, `npm run typecheck`, `npm run lint`, or `npm test` as usual.
+
+To work against the live working tree instead of the baked-in copy, mount it (requires a Docker daemon that shares the host filesystem):
+
+```bash
+docker run --rm -it -v "$PWD":/app -w /app pi-catalog-dev bash
+```
+
+Note: the mount shadows the baked-in `/app`, so re-run `npm ci --ignore-scripts --no-audit --no-fund` inside the container on first use (or ensure the host already has `node_modules`).
+
 ## Documentation
 
 - [Catalog Details](docs/catalog.md) (generated from package manifests)
